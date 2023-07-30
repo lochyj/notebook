@@ -48,14 +48,22 @@
 
         canvas.appendChild(app.view);
 
-        const tableWidth = 7;
+        const tableWidth = 8;
         const tableHeight = 28;
 
         var table = createNewTable(tableWidth, tableHeight);
 
-        console.log(table)
-
         drawTable(table, tableContainer);
+
+        // start animating
+        mainLoop();
+
+        function mainLoop() {
+            // render the root container
+            app.renderer.render(tableContainer);
+
+            requestAnimationFrame(mainLoop);
+        };
     </script>
 </body>
 </html>

@@ -29,28 +29,45 @@ function letterToNumber(letter) {
 function createNewTable(width, height) {
     var table = {};
 
-    for (var i = 1; i < width; i++) {
+    for (var i = 1; i < width + 1; i++) {
         table[numberToLetter(i)] = {};
-        for (var j = 1; j < height; j++) {
+        for (var j = 1; j < height + 1; j++) {
+
+            // This is handy for reference. If you dont know what goes into a cell, look here. also stuff js for not having data structures.
             table[numberToLetter(i)][numberToLetter(j)] = {
-                value: "",
-                formula: "",
+                value: "test",
+                formula: "=SUM(A1:A2)",
                 useFormula: false,
                 error: false,
+
+                position: [numberToLetter(i), numberToLetter(j)],
 
                 width: 100,
                 height: 25,
 
                 selected: false,
 
-                text: {
+                font: {
                     bold: false,
                     italic: false,
                     underline: false,
                     color: 0x000000,
-                    size: 12,
-                    font: "Arial"
-                }
+                    size: 25,
+                    font: "Arial",
+                },
+
+                border: {
+                    top: 1,
+                    bottom: 1,
+                    left: 1,
+                    right: 1,
+                    color: 0x000000,
+                    style: "solid",
+                },
+
+                textObject: null,
+                cellObject: null,
+
             };
         }
     }
@@ -58,16 +75,29 @@ function createNewTable(width, height) {
     return table;
 }
 
-function createText(content, text) {
+function hoverCallback(position) {
+    var cell = table[position[0]][position[1]];
+
+    cell.cellObject.opacity = 0.5;
+    console.log("E")
+}
+
+function createText(content, cell, text, x, y) {
     var textObject = new PIXI.Text(content, {
-        fontFamily: text.font * 4,
-        fontSize: text.size,
+        fontFamily: text.font,
+        fontSize: text.size * 3,
         fill: text.color,
         align: "center"
     });
 
     textObject.scale.x = 0.4;
     textObject.scale.y = 0.4;
+
+    textObject.anchor.x = 0;
+    textObject.anchor.y = 0.5;
+
+    textObject.x = x + 10;
+    textObject.y = y + cell.height / 2;
 
     return textObject;
 }
@@ -90,14 +120,32 @@ function drawCell(cell, x, y, tableContainer) {
     graphics.drawRect(x + 50, y + 25, cell.width, cell.height);
     graphics.endFill();
 
-    graphics.addChild(createText(cell.value, cell.text));
+    graphics.eventMode = "dynamic";
+
+    graphics.hitArea = new PIXI.Rectangle(x + 50, y + 25, cell.width, cell.height);
+
+    graphics.data = cell.position;
+
+    graphics.mouseover = function(mouseData) {
+        hoverCallback(mouseData.target.data);
+    }
+
+    graphics.addChild(createText(cell.value, cell, cell.font, x + 50, y + 25));
     tableContainer.addChild(graphics);
+
+    return [graphics.children[0], graphics];
+}
+
+function drawBorders(column, row) {
+    // Draw the ruler / border for the table, like the 1, 2, 3 rows and the A, B, C columns
 }
 
 function drawTable(table, tableContainer) {
     for (var i = 1; i < Object.keys(table).length; i++) {
         for (var j = 1; j < Object.keys(table[numberToLetter(i)]).length; j++) {
-            drawCell(table[numberToLetter(i)][numberToLetter(j)], i, j, tableContainer);
+            var objects = drawCell(table[numberToLetter(i)][numberToLetter(j)], i - 1, j - 1, tableContainer);
+            table[numberToLetter(i)][numberToLetter(j)].textObject = objects[0];
+            table[numberToLetter(i)][numberToLetter(j)].cellObject = objects[1];
         }
     }
 }
