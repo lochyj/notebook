@@ -24,6 +24,7 @@
         </div>
         <div id="canvas" width="700" height="700"></div>
     </div>
+    <script src="src/table.js"></script>
     <script>
         const canvas = document.getElementById("canvas");
 
@@ -47,117 +48,14 @@
 
         canvas.appendChild(app.view);
 
-        function drawCell(width, height, x, y, content = "", highlight = false) {
-            // We add 50 to allow for there to be a border around the table
-            x = (x * width) + 50;
-            y = (y * height) + 25;
-            const graphics = new PIXI.Graphics();
-
-            if (highlight == true) {
-                graphics.lineStyle(1, 0x201dce, 1);
-            } else {
-                graphics.lineStyle(1, 0xBFBFBF, 1);
-            }
-
-            graphics.drawRect(x, y, width, height);
-            graphics.endFill();
-
-            const text = new PIXI.Text(content, {
-                fontFamily: "Arial",
-                fontSize: 45,
-                fill: 0x000000,
-                align: "center"
-            });
-
-            text.scale.x = 0.4;
-            text.scale.y = 0.4;
-
-            text.x = x + text.width / 2;
-            text.y = y + height / 2 - text.height / 2;
-
-            tableContainer.addChild(text);
-
-            tableContainer.addChild(graphics);
-        }
-
-        function drawAxisCell(width, height, x, y, content = "", highlight = false) {
-            // We add 50 to allow for there to be a border around the table
-            x = x * width;
-            y = y * height;
-
-            if (y == 0) {
-                x -= 50;
-            }
-            const graphics = new PIXI.Graphics();
-
-            if (highlight == true) {
-                graphics.lineStyle(1, 0x201dce, 1);
-            } else {
-                graphics.lineStyle(1, 0xBFBFBF, 1);
-            }
-
-            graphics.drawRect(x, y, width, height);
-            graphics.endFill();
-
-            const text = new PIXI.Text(content, {
-                fontFamily: "Arial",
-                fontSize: 45,
-                fill: 0x000000,
-                align: "center"
-            });
-
-            text.scale.x = 0.4;
-            text.scale.y = 0.4;
-
-            text.x = x + text.width / 2;
-            text.y = y + height / 2 - text.height / 2;
-
-            tableContainer.addChild(text);
-
-            tableContainer.addChild(graphics);
-        }
-
-        function drawAxis(rowBegin, columnBegin, rowEnd, columnEnd) {
-
-            drawAxisCell(50, 25, 0, 0, "", false);
-
-            for (let i = rowBegin; i < rowEnd; i++) {
-                drawAxisCell(100, 25, i + 1, 0, `${i}`, false);
-            }
-            for (let i = columnBegin; i < columnEnd; i++) {
-                drawAxisCell(50, 25, 0, i + 1, `${i}`, false);
-            }
-        }
-
-        function numberToLetter(number) {
-            // if number is 1, return A. if number is 2, return B. if number is 27, return AA.
-
-
-
-        }
-
         const tableWidth = 7;
         const tableHeight = 28;
 
+        var table = createNewTable(tableWidth, tableHeight);
 
+        console.log(table)
 
-        function mainLoop() {
-            tableContainer.removeChildren();
-
-            drawAxis(0, 0, tableWidth, tableHeight);
-
-            for (let i = 0; i < tableWidth; i++) {
-                for (let j = 0; j < tableHeight; j++) {
-                    drawCell(100, 25, i, j, "test", false);
-                }
-            }
-
-            requestAnimationFrame(mainLoop);
-
-        }
-
-        mainLoop();
-
+        drawTable(table, tableContainer);
     </script>
 </body>
 </html>
