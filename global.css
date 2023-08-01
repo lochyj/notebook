@@ -15,7 +15,7 @@
         --main-color: #000000;
     }
 
-    --main-accent: #06800a;
+    --main-accent: darkgreen;
     --main-white: #dfdfdf;
     --main-text-gray: #575757;
 }
@@ -77,12 +77,10 @@ body {
 }
 
 .navigation-tabs button:hover {
-    border-radius: 5px 5px 0 0;
-    background-color: #0000002f;
+    background-color: #00000013;
 }
 
 .navigation-tabs button[data-active="true"] {
-    border-radius: 5px 5px 0 0;
     background-color: var(--main-white);
     color: black;
 }
