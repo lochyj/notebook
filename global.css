@@ -1,0 +1,145 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    @media (prefers-color-scheme: dark) {
+        --background-color: #1c1c1c;
+        --main-color: #ffffff;
+    }
+
+    @media (prefers-color-scheme: light) {
+        --background-color: #F0F0F0;
+        --main-color: #000000;
+    }
+
+    --main-accent: #06800a;
+    --main-white: #dfdfdf;
+    --main-text-gray: #575757;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--main-white);
+}
+
+#canvas {
+    border: 1px solid black;
+    width: min-content;
+}
+
+#toolbar {
+    /* Place at the top of the screen */
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+
+    height: 125px;
+}
+
+#tabs {
+    height: 35px;
+    background-color: var(--main-accent);
+
+    padding: 0;
+    margin: 0;
+
+    display: block;
+}
+
+.navigation-tabs {
+    display: inline-flex;
+    height: 100%;
+
+    /* Add a little space to the left of the buttons */
+    padding-left: 5px;
+}
+
+.navigation-tabs button {
+
+    width: max(80px, 8vw);
+    height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    border-radius: 0;
+    border: 0;
+
+    background-color: var(--main-accent);
+    color: white;
+
+    font-weight: bolder;
+}
+
+.navigation-tabs button:hover {
+    border-radius: 5px 5px 0 0;
+    background-color: #0000002f;
+}
+
+.navigation-tabs button[data-active="true"] {
+    border-radius: 5px 5px 0 0;
+    background-color: var(--main-white);
+    color: black;
+}
+
+#tab-toolbar {
+    height: 90px;
+
+    background-color: var(--main-white);
+
+    padding: 0;
+    margin: 0;
+
+    display: block;
+
+    border-bottom: 1px solid gray;
+}
+
+#tab-toolbar > div {
+    height: 100%;
+}
+
+/* A chunk is essentially a section of the #tab-toolbar -> <active div> */
+/* TODO: add space between the border and the chunk separator -> (border-right: 1px solid gray;) */
+.toolbar-chunk {
+    display: inline-block;
+
+    position: relative;
+
+    width: 150px;
+    height: 90%;
+
+    padding: 3px 10px 3px 10px;
+    margin: 5px 0px 5px 0px;
+
+    align-self: center;
+
+    border: 0;
+    border-right: 1px solid gray;
+
+}
+
+.toolbar-chunk > h1 {
+    display: fixed;
+    position: absolute;
+
+    font-size: 1rem;
+    font-weight: normal;
+
+    color: var(--main-text-gray);
+
+    bottom: 0;
+
+    width: 85%;
+    text-align: center;
+
+}
+
+#interface {
+    display: inline;
+}

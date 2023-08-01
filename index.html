@@ -6,26 +6,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>notebook</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js" integrity="sha512-Ch/O6kL8BqUwAfCF7Ie5SX1Hin+BJgYH4pNjRqXdTEqMsis1TUYg+j6nnI9uduPjGaj7DN4UKCZgpvoExt6dkw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-        #canvas {
-            border: 1px solid black;
-            width: min-content;
-        }
-    </style>
+    <link rel="stylesheet" href="global.css">
 </head>
 <body>
     <div>
         <div id="toolbar">
-            x ... x
+            <div id="tabs">
+                <!-- Tabs: e.g file, home, insert, data, etc... -->
+                <div class="navigation-tabs">
+                    <button id="navigation-file" onclick="changeActiveTab(this)" data-active="false">
+                        File
+                    </button>
+                    <button id="navigation-home" onclick="changeActiveTab(this)" data-active="true">
+                        Home
+                    </button>
+                    <button id="navigation-insert" onclick="changeActiveTab(this)" data-active="false">
+                        Insert
+                    </button>
+                    <button id="navigation-formulas" onclick="changeActiveTab(this)" data-active="false">
+                        Formulas
+                    </button>
+                </div>
+            </div>
+            <div id="tab-toolbar">
+                <div id="file">
+                    <div class="toolbar-chunk">
+                        <span>Testing!</span>
+                        <h1>File</h1>
+                    </div>
+                </div>
+                <div id="home">
+                    <div class="toolbar-chunk">
+                        <span>Testing!</span>
+                        <h1>Clipboard</h1>
+                    </div>
+                    <div class="toolbar-chunk">
+                        <span>Testing!</span>
+                        <h1>Font</h1>
+                    </div>
+                    <div class="toolbar-chunk">
+                        <span>Testing!</span>
+                        <h1>Alignment</h1>
+                    </div>
+                    <div class="toolbar-chunk">
+                        <span>Testing!</span>
+                        <h1>Number</h1>
+                    </div>
+                    <div class="toolbar-chunk">
+                        <span>Testing!</span>
+                        <h1>Styles</h1>
+                    </div>
+                    <div class="toolbar-chunk">
+                        <span>Testing!</span>
+                        <h1>Cells</h1>
+                    </div>
+                </div>
+                <div id="insert">
+                    <div class="toolbar-chunk">
+                        <span>Testing!</span>
+                        <h1>Insert</h1>
+                    </div>
+                </div>
+                <div id="formulas">
+                    <div class="toolbar-chunk">
+                        <span>Testing!</span>
+                        <h1>Formulas</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="interface">
+            <input type="text">
+            <div></div>
+            <input type="text">
         </div>
         <div id="canvas" width="700" height="700"></div>
     </div>
     <script src="src/table.js"></script>
     <script>
+
+        // --------------------
+        // Utility references |
+        // --------------------
+
+        const toolbar = document.getElementById("toolbar");
+        const tabs = document.getElementById("tabs");
+        const tabToolbar = document.getElementById("tab-toolbar");
+
+
+        // ---------------------
+        // Constant references |
+        // ---------------------
+
+        const navigationFile = document.getElementById("navigation-file");
+        const navigationHome = document.getElementById("navigation-home");
+        const navigationInsert = document.getElementById("navigation-insert");
+        const navigationFormulas = document.getElementById("navigation-formulas");
+
+        const file = document.getElementById("file");
+        const home = document.getElementById("home");
+        const insert = document.getElementById("insert");
+        const formulas = document.getElementById("formulas");
+
+        // ------------------
+        // Helper functions |
+        // ------------------
+
+        function changeActiveTab(tab) {
+            disableTabs();
+            enableTab(tab);
+        }
+
+        function disableTab(element) {
+            element.setAttribute("data-active", "false");
+        }
+
+        function enableTab(element) {
+            element.setAttribute("data-active", "true");
+            changeActiveMenu(element.id.split("-")[1]);
+        }
+
+        function disableTabs() {
+            disableTab(navigationFile);
+            disableTab(navigationHome);
+            disableTab(navigationInsert);
+            disableTab(navigationFormulas);
+        }
+
+        function disableMenu(element) {
+            element.setAttribute("aria-disabled", "true");
+            element.style.display = "none";
+            element.style.visibility = "hidden";
+        }
+
+        function enableMenu(element) {
+            element.setAttribute("aria-disabled", "false");
+            element.style.display = "block";
+            element.style.visibility = "visible";
+        }
+
+        function disableMenus() {
+            disableMenu(file);
+            disableMenu(home);
+            disableMenu(insert);
+            disableMenu(formulas);
+        }
+
+        function changeActiveMenu(menu) {
+            disableMenus();
+            switch (menu) {
+
+                case "file":
+                    enableMenu(file);
+                    break;
+
+                case "home":
+
+                    enableMenu(home);
+                    break;
+
+                case "insert":
+
+                    enableMenu(insert);
+                    break;
+
+                case "formulas":
+
+                    enableMenu(formulas);
+                    break;
+                default:
+                    console.error("Invalid menu name");
+            }
+        }
+
+        // -------------------
+        // Startup functions |
+        // -------------------
+
+        // Reset the toolbar
+        disableTabs();
+        disableMenus();
+
+        // Set the default menu
+        changeActiveTab(navigationHome);
+        changeActiveMenu("home");
+
+    </script>
+    <script>
+
+        // ---------------------------------------
+        // Table helper and activation functions |
+        // ---------------------------------------
+
         const canvas = document.getElementById("canvas");
 
         // TODO: make canvas responsive
@@ -53,17 +225,9 @@
 
         var table = createNewTable(tableWidth, tableHeight);
 
-        drawTable(table, tableContainer);
+        // For some reason this pins my cpu usage at 30%
+        //drawTable(table, tableContainer);
 
-        // start animating
-        mainLoop();
-
-        function mainLoop() {
-            // render the root container
-            app.renderer.render(tableContainer);
-
-            requestAnimationFrame(mainLoop);
-        };
     </script>
 </body>
 </html>
