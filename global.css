@@ -152,3 +152,26 @@ body {
 #interface {
     display: inline;
 }
+
+/*
+    Global styles
+*/
+
+
+/* Grid styles */
+.grid-box {
+    display: inline-grid;
+    width: min-content;
+}
+
+.grid-r1 {  grid-template-rows: 1fr;  }
+.grid-r2 {  grid-template-rows: 1fr 1fr;  }
+.grid-r3 {  grid-template-rows: 1fr 1fr 1fr;  }
+.grid-r4 { grid-template-rows: 1fr 1fr 1fr 1fr;  }
+
+.grid-c1 {  grid-template-columns: 1fr;  }
+.grid-c2 {  grid-template-columns: 1fr 1fr;  }
+.grid-c3 {  grid-template-columns: 1fr 1fr 1fr;  }
+.grid-c4 {  grid-template-columns: 1fr 1fr 1fr 1fr;  }
+
+.grid-place-c1 {  grid-column: 1;  }
